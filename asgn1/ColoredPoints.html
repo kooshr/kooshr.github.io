@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Change a point color</title>
+    </head>
+    <body onload="main()">
+        <!-- Row 1: Canvas -->
+        <div style="margin-bottom: 10px">
+            <canvas id="webgl" width="400" height="400">
+                Please use a browser that supports "canvas"
+            </canvas>
+        </div>
+
+        <!-- Row 2: Dot Counter -->
+        <p id="numdot">XXX</p>
+
+        <!-- Row 3: Clear Button (own row) -->
+        <div style="margin-bottom: 10px;">
+            <button type="button" id="clearButton">Clear</button>
+            <a href="original.png">Original Rocket!</a>
+            <button type="button" id="drawRocketButton">Draw Rocket!</button>
+            <button type="button" id="animateRocketButton">Fly Rocket Animation!</button> <- Click to start (this is the awesomeness)
+        </div>
+
+        <!-- Row 4: Color Buttons and Drawing Mode Buttons -->
+        <div style="margin-bottom: 10px">
+            <span>Drawing Mode:</span>
+            <button type="button" id="pointButton">Square</button>
+            <button type="button" id="triButton">Triangle</button>
+            <button type="button" id="circleButton">Circle</button>
+        </div>
+
+        <!-- Row 5: Color Sliders -->
+        <div style="margin-bottom: 10px">
+            <label for="redSlide">Red</label>
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+                class="slider"
+                id="redSlide"
+            />
+
+            <label for="greenSlide" style="margin-left: 20px">Green</label>
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+                class="slider"
+                id="greenSlide"
+            />
+
+            <label for="blueSlide" style="margin-left: 20px">Blue</label>
+            <input
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+                class="slider"
+                id="blueSlide"
+            />
+        </div>
+
+        <!-- Row 6: Shape Size and (Circles) Segment Count Sliders -->
+        <div style="margin-bottom: 10px">
+            <label for="sizeSlide">Shape Size</label>
+            <input
+                type="range"
+                min="5"
+                max="40"
+                value="0"
+                class="slider"
+                id="sizeSlide"
+            />
+
+            <label for="segmentsSlide" style="margin-left: 20px">
+                (Circles) Segment Count
+            </label>
+            <input
+                type="range"
+                min="3"
+                max="36"
+                value="10"
+                class="slider"
+                id="segmentsSlide"
+            />
+        </div>
+
+        <!-- Scripts -->
+        <script src="lib/webgl-utils.js"></script>
+        <script src="lib/webgl-debug.js"></script>
+        <script src="lib/cuon-utils.js"></script>
+        <script src="Triangle.js"></script>
+        <script src="Point.js"></script>
+        <script src="Circle.js"></script>
+        <script src="ColoredPoints.js"></script>
+    </body>
+</html>
