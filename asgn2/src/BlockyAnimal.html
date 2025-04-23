@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BlockyAnimal Controller</title>
+  <style>
+    /* make the body a two-column flex container */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      font-family: sans-serif;
+    }
+    /* sidebar for all controls */
+    #controls {
+      width: 300px;
+      padding: 16px;
+      box-sizing: border-box;
+      background: #f8f8f8;
+      overflow-y: auto;
+      border-right: 1px solid #ddd;
+    }
+    /* canvas takes remaining space */
+    #canvas-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #222;
+    }
+    canvas { background: #000; }
+    fieldset {
+      margin-bottom: 16px;
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+    legend {
+      font-weight: bold;
+    }
+    label {
+      display: block;
+      margin-top: 8px;
+    }
+    input[type=range] {
+      width: 100%;
+    }
+    button {
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+    #numdot {
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body onload="main()">
+  <div id="controls">
+    <p id="numdot">XXX</p>
+
+    <fieldset>
+      <legend>Camera</legend>
+      <label for="angleSlide">Camera Angle</label>
+      <input id="angleSlide" type="range" min="0" max="360" value="120">
+    </fieldset>
+
+    <fieldset>
+      <legend>Head Controls</legend>
+      <label for="headYaw">Yaw (walk &amp; slider)</label>
+      <input id="headYaw" type="range" min="-90" max="90" value="0">
+      <label for="headPitch">Pitch</label>
+      <input id="headPitch" type="range" min="-45" max="45" value="0">
+    </fieldset>
+
+    <fieldset>
+      <legend>Snout Controls</legend>
+      <label for="upperSnoutPitch">Upper Snout Pitch</label>
+      <input id="upperSnoutPitch" type="range" min="-3" max="10" value="0">
+      <label for="joint2">Lower Snout Pitch</label>
+      <input id="joint2" type="range" min="-10" max="10" value="0">
+    </fieldset>
+
+    <fieldset>
+      <legend>Nose</legend>
+      <label for="joint3">Roll</label>
+      <input id="joint3" type="range" min="-30" max="30" value="0">
+    </fieldset>
+
+    <fieldset>
+      <legend>Animation</legend>
+      <button id="walkOnButton" type="button">Walk On</button>
+      <button id="walkOffButton" type="button">Walk Off</button>
+    </fieldset>
+  </div>
+
+  <div id="canvas-container">
+    <canvas id="webgl" width="750" height="750">
+      Your browser doesn’t support canvas.
+    </canvas>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/cuon-matrix.js"></script>
+  <script src="Triangle.js"></script>
+  <script src="Point.js"></script>
+  <script src="Circle.js"></script>
+  <script src="Cube.js"></script>
+  <script src="Cylinder.js"></script>
+  <script src="BlockyAnimal.js"></script>
+</body>
+</html>
