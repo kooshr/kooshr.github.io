@@ -296,6 +296,9 @@ function tick() {
   if (pressedKeys["KeyS"]) camera.moveBackward(dt);
   if (pressedKeys["KeyA"]) camera.moveLeft(dt);
   if (pressedKeys["KeyD"]) camera.moveRight(dt);
+  if (pressedKeys["Space"]) camera.moveUp(dt);
+  if (pressedKeys["ShiftLeft"]) camera.moveDown(dt);
+
 
   for (let i = g_balls.length - 1; i >= 0; i--) {
     const b = g_balls[i];
@@ -311,7 +314,11 @@ function tick() {
       g_balls.splice(i,1);
     }
   }
-
+  const rotSpeed = 120;
+  if (pressedKeys["ArrowLeft"])  camera.yaw(  rotSpeed * dt);
+  if (pressedKeys["ArrowRight"]) camera.yaw( -rotSpeed * dt);
+  if (pressedKeys["ArrowUp"])    camera.pitch( (rotSpeed/2) * dt);
+  if (pressedKeys["ArrowDown"])  camera.pitch(-(rotSpeed/2) * dt);
   renderScene();
   requestAnimationFrame(tick);
 }
@@ -599,7 +606,7 @@ function renderScene() {
         .scale(BALL_SIZE, BALL_SIZE, BALL_SIZE);
     cube.render();
   });
-  
+
   const target = getTargetColumn();
   if (target) {
     const { x, z } = target;

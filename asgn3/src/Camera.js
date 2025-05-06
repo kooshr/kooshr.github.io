@@ -182,6 +182,32 @@ class Camera {
     }
   }
 
+  /** Move up along the camera’s up vector (Space) */
+moveUp() {
+  const e = this.eye.elements,
+        a = this.at.elements,
+        u = this.up.elements;
+  const dx = u[0] * this.speed,
+        dy = u[1] * this.speed,
+        dz = u[2] * this.speed;
+  e[0] += dx; e[1] += dy; e[2] += dz;
+  a[0] += dx; a[1] += dy; a[2] += dz;
+  this.updateViewMatrix();
+}
+
+/** Move down along the camera’s up vector (Shift) */
+moveDown() {
+  const e = this.eye.elements,
+        a = this.at.elements,
+        u = this.up.elements;
+  const dx = u[0] * this.speed,
+        dy = u[1] * this.speed,
+        dz = u[2] * this.speed;
+  e[0] -= dx; e[1] -= dy; e[2] -= dz;
+  a[0] -= dx; a[1] -= dy; a[2] -= dz;
+  this.updateViewMatrix();
+}
+
   /** Rotate around the world up axis (yaw) */
   yaw(angleDeg) {
     const e = this.eye.elements,
@@ -270,3 +296,4 @@ class Camera {
     this.updateProjectionMatrix();
   }
 }
+

@@ -2,83 +2,171 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Change a point color</title>
-
-    <!-- ── ADD THIS STYLE BLOCK FOR THE CROSSHAIR ── -->
+    <title>Blocky World Demo</title>
     <style>
-      /* crosshair lines */
+      /* ── GLOBAL ── */
+      * { margin:0; padding:0; box-sizing:border-box; }
+      html, body { width:100%; height:100%; overflow:hidden; }
+      body {
+        background: #222;
+        color: #eee;
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      /* ── DESCRIPTION ── */
+      #description {
+        text-align: center;
+        margin-bottom: 20px;
+        max-width: 600px;
+        font-size: 1em;
+        line-height: 1.4;
+      }
+
+      /* ── CONTAINER ── */
+      #layout {
+        display: flex;
+        gap: 30px;
+      }
+
+      /* ── CANVAS ── */
+      .canvas-container {
+        position: relative;
+      }
+      #webgl {
+        border: 2px solid #555;
+        border-radius: 4px;
+        display: block;
+      }
       #crosshair {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        margin: -10px 0 0 -10px;  /* center the 20×20 box */
-        pointer-events: none;      /* let clicks pass through */
+        top:50%; left:50%;
+        width:20px; height:20px;
+        margin:-10px 0 0 -10px;
+        pointer-events:none;
       }
       #crosshair:before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 0;
-        width: 2px;
-        height: 100%;
-        background: rgba(255, 255, 255, 1);
+        content:'';
+        position:absolute;
+        left:50%; top:0;
+        width:2px; height:100%;
+        background:rgba(255,255,255,0.8);
       }
       #crosshair:after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
+        content:'';
+        position:absolute;
+        top:50%; left:0;
+        width:100%; height:2px;
+        background:rgba(255,255,255,0.8);
+      }
+
+      /* ── SIDEBAR ── */
+      #sidebar {
+        width: 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      #controls {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #controls label {
+        font-size: 0.9em;
+      }
+      #controls .slider {
         width: 100%;
-        height: 2px;
-        background: rgba(255, 255, 255, 1);
+      }
+      #numdot {
+        font-family: monospace;
+        text-align: center;
+      }
+      #instructions {
+        background: #333;
+        border-radius: 4px;
+        padding: 12px;
+        font-size: 0.9em;
+      }
+      #instructions ul {
+        list-style: inside disc;
+        margin-top: 8px;
+      }
+      #instructions li {
+        margin: 4px 0;
       }
     </style>
   </head>
+
   <body onload="main()">
-    <!-- Row 1: Canvas + CROSSHAIR WRAPPER -->
-    <div style="position: relative; display: inline-block; margin-bottom: 10px;">
-      <canvas id="webgl" width="600" height="600">
-        Please use a browser that supports "canvas"
-      </canvas>
-      <!-- ── INSERT THE CROSSHAIR DIV HERE ── -->
-      <div id="crosshair"></div>
+    <!-- ── TITLE & DESCRIPTION ── -->
+    <div>
+      <h1>Blocky World Demo</h1>
+      <div id="description">
+        Sam the fox rules this blocky realm—show him who’s boss!<br>
+        Throw cube‑balls at Sam (Wow factor) and reshape the world block by block.
+      </div>
     </div>
 
-    <!-- Row 2: Dot Counter -->
-    <p id="numdot">XXX</p>
+    <div id="layout">
+      <!-- ── GAME VIEW ── -->
+      <div class="canvas-container">
+        <canvas id="webgl" width="600" height="600">
+          Your browser does not support WebGL.
+        </canvas>
+        <div id="crosshair"></div>
+      </div>
 
-    <!-- Row 4: Camera Angle -->
-    <div style="margin-bottom: 10px">
-      <label for="angleSlide">Camera Angle</label>
-      <input
-        type="range"
-        min="0"
-        max="360"
-        value="45"
-        class="slider"
-        id="angleSlide"
-      />
+      <!-- ── SIDEBAR ── -->
+      <div id="sidebar">
+        <div id="controls">
+          <label for="angleSlide">Camera Angle</label>
+          <input
+            type="range"
+            id="angleSlide"
+            class="slider"
+            min="0" max="360"
+            value="45"
+          />
+        </div>
+        <div id="numdot">-- ms / -- fps</div>
+        <div id="instructions">
+          <strong>Controls</strong>
+          <ul>
+            <li><b>WASD</b> – Move</li>
+            <li><b>Mouse</b> – Look &amp; Aim</li>
+            <li><b>Q</b> – Add Dirt Block</li>
+            <li><b>E</b> – Remove Block</li>
+            <li><b>R</b> – Toss a Cube‑Ball</li>
+            <li><b>Space</b> – Fly Up</li>
+            <li><b>Shift</b> – Fly Down</li>
+            <li><b>Arrow Keys</b> – Rotate View</li>
+            <li><b>Scroll</b> – Zoom In/Out</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    Meet Sam the fox, He believes that he's the king of the hill. We can throw balls at him to show him otherwise.
-    <br>Note: Since it's dangerous to throw balls at the sky, we can only throw them while looking at the ground or trees.
-    <br>
-    <br>
-    Use E to delete blocks and Q to add blocks. <br>
-    Use the mouse to aim and throw balls at Sam and use "wasd" to move around.
-
-
-    <!-- Scripts -->
+    <!-- ── LIBRARIES ── -->
     <script src="../lib/webgl-utils.js"></script>
     <script src="../lib/webgl-debug.js"></script>
     <script src="../lib/cuon-utils.js"></script>
     <script src="../lib/cuon-matrix.js"></script>
-    <!-- <img src="../images/sky.jpg" alt="Sky background" /> -->
+
+    <!-- ── CORE SCRIPTS ── -->
     <script src="Triangle.js"></script>
     <script src="Cube.js"></script>
     <script src="Camera.js"></script>
     <script src="World.js"></script>
+
+    <!-- ── PREVENT SPACE SCROLL ── -->
+    <script>
+      window.addEventListener('keydown', e => {
+        if (e.code === 'Space') e.preventDefault();
+      });
+    </script>
   </body>
 </html>
