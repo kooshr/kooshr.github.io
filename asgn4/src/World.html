@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Blocky World with Lighting</title>
+  <style>
+    :root {
+      --bg-start: #2c3e50;
+      --bg-middle: #4ca1af;
+      --bg-end: #8e44ad;
+      --text-color: #f5f5f5;
+      --panel-bg: rgba(0, 0, 0, 0.6);
+      --accent: #1abc9c;
+      --accent-light: #16a085;
+    }
+    /* Page layout */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-middle), var(--bg-end));
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+    }
+    header {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    /* Canvas styling */
+    .viewport {
+      text-align: center;
+    }
+    #webgl {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      background: #000;
+    }
+    /* Panel common */
+    .panel {
+      background: var(--panel-bg);
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .panel h2 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 6px;
+    }
+    .panel ul {
+      list-style: none;
+      line-height: 1.6;
+    }
+    .panel ul li {
+      margin-bottom: 4px;
+    }
+    /* Toggle buttons */
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .button-group button {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 4px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .button-group button:hover {
+      background: var(--accent-light);
+    }
+    /* Sliders */
+    .slider-container {
+      margin-bottom: 12px;
+    }
+    .slider-container label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #ccc;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+    /* Sidebar */
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #numdot {
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body onload="main()">
+  <div class="container">
+    <header>
+      <h1>Blocky World with Lighting</h1>
+    </header>
+    <main>
+      <div class="viewport">
+        <canvas id="webgl" width="600" height="600">
+          Your browser does not support HTML5 canvas.
+        </canvas>
+      </div>
+      <section class="panel controls">
+        <h2>Controls</h2>
+        <ul>
+          <li><strong>WASD</strong> – Move</li>
+          <li><strong>Mouse</strong> – Look Around</li>
+          <li><strong>Q / E</strong> – Pan Left / Right</li>
+          <li><strong>Scroll</strong> – Zoom</li>
+        </ul>
+      </section>
+      <section class="panel description">
+        <h2>About</h2>
+        <p>
+          Adjust the light cube's Y & Z positions (X animates automatically). Use the sliders to change the light color, and toggle normals, point light, and spotlight on or off below.
+        </p>
+      </section>
+      <section class="panel toggles">
+        <h2>Toggle Features</h2>
+        <div class="button-group">
+          <button id="normalOn">Normals On</button>
+          <button id="normalOff">Normals Off</button>
+        </div>
+        <div class="button-group">
+          <button id="lightOn">Light On</button>
+          <button id="lightOff">Light Off</button>
+        </div>
+        <div class="button-group">
+          <button id="spotOn">Spotlight On</button>
+          <button id="spotOff">Spotlight Off</button>
+        </div>
+      </section>
+      <section class="panel sliders">
+        <h2>Camera Angle</h2>
+        <div class="slider-container">
+          <label for="angleSlide">Camera Angle</label>
+          <input type="range" id="angleSlide" class="slider" min="0" max="360" value="45">
+        </div>
+        <h2>Light Position</h2>
+        <div class="slider-container">
+          <label for="lightXSlide">Light X</label>
+          <input type="range" id="lightXSlide" class="slider" min="-250" max="250" value="0">
+        </div>
+        <div class="slider-container">
+          <label for="lightYSlide">Light Y</label>
+          <input type="range" id="lightYSlide" class="slider" min="-250" max="250" value="0">
+        </div>
+        <div class="slider-container">
+          <label for="lightZSlide">Light Z</label>
+          <input type="range" id="lightZSlide" class="slider" min="-250" max="250" value="0">
+        </div>
+        <h2>Light Color</h2>
+        <div class="slider-container">
+          <label for="lightRSlide">R</label>
+          <input type="range" id="lightRSlide" class="slider" min="0" max="2" step="0.01" value="2">
+        </div>
+        <div class="slider-container">
+          <label for="lightGSlide">G</label>
+          <input type="range" id="lightGSlide" class="slider" min="0" max="2" step="0.01" value="2">
+        </div>
+        <div class="slider-container">
+          <label for="lightBSlide">B</label>
+          <input type="range" id="lightBSlide" class="slider" min="0" max="2" step="0.01" value="2">
+        </div>
+      </section>
+    </main>
+    <aside>
+      <div class="panel">
+        <p id="numdot">Dots: XXX</p>
+      </div>
+    </aside>
+  </div>
+  <!-- Scripts -->
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/cuon-matrix.js"></script>
+  <script src="Triangle.js"></script>
+  <script src="Cube.js"></script>
+  <script src="Sphere.js"></script>
+  <script src="Camera.js"></script>
+  <script src="World.js"></script>
+</body>
+</html>
