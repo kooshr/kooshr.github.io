@@ -192,10 +192,13 @@ legend.innerHTML = `
   A/D: Steer<br>
   Space: Drift<br>
   R: Reload Scene<br>
+  ←/→ (Arrow Keys): Pan Camera Left/Right<br>
+  ↑/↓ (Arrow Keys): Move Camera Forward/Backward<br>
+  Q/E: Move Camera Up/Down<br>
   Wow point: Added basic physics engine<br>
   Try crashing into the objects!<br>
-
 `;
+
 Object.assign(legend.style, {
   position: 'absolute',
   top: '10px',
@@ -328,6 +331,35 @@ function animate() {
     carMesh.position.copy(carBody.position);
     carMesh.quaternion.copy(carBody.quaternion);
   }
+
+  const camSpeed = 0.5;
+  // Forward/Backward
+  if (keys['arrowup']) {
+    const dir = new THREE.Vector3();
+    camera.getWorldDirection(dir);
+    camera.position.add(dir.multiplyScalar(camSpeed));
+  }
+  if (keys['arrowdown']) {
+    const dir = new THREE.Vector3();
+    camera.getWorldDirection(dir);
+    camera.position.add(dir.multiplyScalar(-camSpeed));
+  }
+  // Left/Right
+  if (keys['arrowleft']) {
+    const left = new THREE.Vector3();
+    camera.getWorldDirection(left);
+    left.cross(camera.up).normalize();
+    camera.position.add(left.multiplyScalar(-camSpeed));
+  }
+  if (keys['arrowright']) {
+    const right = new THREE.Vector3();
+    camera.getWorldDirection(right);
+    right.cross(camera.up).normalize();
+    camera.position.add(right.multiplyScalar(camSpeed));
+  }
+  // Up/Down
+  if (keys['q']) camera.position.y += camSpeed;
+  if (keys['e']) camera.position.y -= camSpeed;
 
   controls.update();
   renderer.render(scene, camera);
