@@ -1,0 +1,32 @@
+<!-- World.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Three.js Exploration World</title>
+    <!-- importmap for Three.js and its examples -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/",
+          "cannon-es":  "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+        }
+      }
+    </script>
+    <!-- Our application code -->
+    <script type="module" src="World.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- the renderer will append its <canvas> here -->
+  </body>
+</html>
